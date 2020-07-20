@@ -181,6 +181,7 @@ class LineChartRenderer extends LineRadarRenderer {
   }
 
   void drawCubicBezier(Canvas canvas, ILineDataSet dataSet) {
+
     double phaseY = animator.getPhaseY();
 
     Transformer trans = _provider.getTransformer(dataSet.getAxisDependency());
@@ -303,7 +304,7 @@ class LineChartRenderer extends LineRadarRenderer {
 //    } else {
 
     drawFilledPath2(
-        c, spline, dataSet.getFillColor().value, dataSet.getFillAlpha());
+        c, spline, dataSet.getFillColor().value, dataSet.getFillAlpha(),isGradient: dataSet.isGradientFill());
 
 //    }
   }
@@ -461,7 +462,6 @@ class LineChartRenderer extends LineRadarRenderer {
     int currentStartIndex = 0;
     int currentEndIndex = indexInterval;
     int iterations = 0;
-
     // Doing this iteratively in order to avoid OutOfMemory errors that can happen on large bounds sets.
     do {
       currentStartIndex = startingIndex + (iterations * indexInterval);
@@ -481,8 +481,19 @@ class LineChartRenderer extends LineRadarRenderer {
 //          drawFilledPath(c, filled, drawable);
 //        } else {
 
+//        List<Rect> gradientRectList;
+//        if(dataSet.isGradientFill() && points.length >= 4)
+//          {
+//            double bottomPoint = points[1];
+//            gradientRectList = [Rect.fromLTRB(points[0], points[0], right, bottom)];
+//
+//            for (int i = 2; i < points.length; i += 2) {
+////              filled.lineTo(points[i], points[i + 1]);
+//            }
+//          }
+
         drawFilledPath2(
-            c, filled, dataSet.getFillColor().value, dataSet.getFillAlpha());
+            c, filled, dataSet.getFillColor().value, dataSet.getFillAlpha(),isGradient: dataSet.isGradientFill());
 //        }
       }
 
@@ -508,6 +519,7 @@ class LineChartRenderer extends LineRadarRenderer {
     final Path filled = outputPath;
     filled.reset();
 
+    points.clear();
     final Entry entry = dataSet.getEntryForIndex(startIndex);
 
     points.add(entry.x);

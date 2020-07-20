@@ -41,13 +41,43 @@ abstract class LineRadarRenderer extends LineScatterCandleRadarRenderer {
   /// @param fillColor
   /// @param fillAlpha
   void drawFilledPath2(
-      Canvas c, Path filledPath, int fillColor, int fillAlpha) {
+      Canvas c, Path filledPath, int fillColor, int fillAlpha,{bool isGradient = false}) {
+
     int color = (fillAlpha << 24) | (fillColor & 0xffffff);
 
     if (clipPathSupported()) {
       c.save();
-      c.clipPath(filledPath);
-      c.drawColor(Color(color), BlendMode.srcOver);
+//      c.clipPath(filledPath);
+
+      if(isGradient )
+        {
+          var previous = renderPaint.style;
+          var previousShader = renderPaint.shader;
+          renderPaint.style = PaintingStyle.fill;
+
+          renderPaint
+            ..shader = LinearGradient(
+                begin: Alignment.topCenter,end: Alignment.bottomCenter,tileMode: TileMode.mirror,
+                colors: [Color(color),Color((fillAlpha << 24) | 0xffffff)])
+                .createShader(filledPath.getBounds());
+//        Color(color);
+
+          c.drawPath(filledPath, renderPaint);
+//            c.drawRect(filledPath.getBounds(), renderPaint);
+//          c.drawRect(filledPath.getBounds(), renderPaint);
+
+
+
+          // restore
+          renderPaint
+            ..style = previous
+            ..shader = previousShader;
+        }
+      else
+        {
+          c.clipPath(filledPath);
+          c.drawColor(Color(color), BlendMode.srcOver);
+        }
       c.restore();
     } else {
       // save

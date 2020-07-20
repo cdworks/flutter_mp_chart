@@ -3,6 +3,7 @@ import 'package:flutter/widgets.dart';
 import 'package:mp_chart/mp/controller/bar_chart_controller.dart';
 import 'package:mp_chart/mp/core/axis/y_axis.dart';
 import 'package:mp_chart/mp/core/common_interfaces.dart';
+import 'package:mp_chart/mp/core/data_provider/bar_data_provider.dart';
 import 'package:mp_chart/mp/core/description.dart';
 import 'package:mp_chart/mp/core/enums/axis_dependency.dart';
 import 'package:mp_chart/mp/core/functions.dart';
@@ -51,6 +52,7 @@ class HorizontalBarChartController extends BarChartController {
     Paint borderPaint,
     Color backgroundColor,
     Color gridBackColor,
+    LineCapType capType,
     Color borderColor,
     double borderStrokeWidth = 1.0,
     AxisLeftSettingFunction axisLeftSettingFunction,
@@ -106,6 +108,7 @@ class HorizontalBarChartController extends BarChartController {
             scaleYEnabled: scaleYEnabled,
             drawGridBackground: drawGridBackground,
             drawBorders: drawBorders,
+            capType:capType,
             clipValuesToContent: clipValuesToContent,
             minOffset: minOffset,
             drawListener: drawListener,
@@ -167,6 +170,7 @@ class HorizontalBarChartController extends BarChartController {
         borderPaint,
         drawGridBackground,
         drawBorders,
+        capType,
         clipValuesToContent,
         minOffset,
         keepPositionOnRotation,

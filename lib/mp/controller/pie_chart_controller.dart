@@ -26,6 +26,7 @@ class PieChartController extends PieRadarController<PieChartPainter> {
   double centerTextOffsetX;
   double centerTextOffsetY;
   TypeFace centerTextTypeface;
+  double centerTextSize;
   TypeFace entryLabelTypeface;
   Color backgroundColor;
 
@@ -45,6 +46,7 @@ class PieChartController extends PieRadarController<PieChartPainter> {
     this.centerTextOffsetX = 0.0,
     this.centerTextOffsetY = 0.0,
     this.centerTextTypeface,
+    this.centerTextSize,
     this.entryLabelTypeface,
     this.backgroundColor,
     IMarker marker,
@@ -138,6 +140,7 @@ class PieChartController extends PieRadarController<PieChartPainter> {
       centerTextOffsetY,
       entryLabelTypeface,
       centerTextTypeface,
+      centerTextSize,
       holeRadiusPercent,
       transparentCircleRadiusPercent,
       drawCenterText,
@@ -146,6 +149,12 @@ class PieChartController extends PieRadarController<PieChartPainter> {
       minAngleForSlices,
       backgroundColor,
     );
+  }
+  
+
+  void setCenterText()
+  {
+    
   }
 
   @override

@@ -11,6 +11,7 @@ import 'package:mp_chart/mp/core/render/x_axis_renderer.dart';
 import 'package:mp_chart/mp/core/render/y_axis_renderer.dart';
 import 'package:mp_chart/mp/core/transformer/transformer.dart';
 import 'package:mp_chart/mp/painter/combined_chart_painter.dart';
+import '../core/data_provider/bar_data_provider.dart';
 
 class CombinedChartController
     extends BarLineScatterCandleBubbleController<CombinedChartPainter> {
@@ -19,6 +20,7 @@ class CombinedChartController
   bool drawBarShadow;
   bool fitBars;
   List<DrawOrder> drawOrder;
+  LineCapType capType;
 
   CombinedChartController({
     this.drawValueAboveBar = false,
@@ -26,6 +28,7 @@ class CombinedChartController
     this.drawBarShadow = false,
     this.fitBars = true,
     this.drawOrder,
+    this.capType,
     int maxVisibleCount = 100,
     bool autoScaleMinMaxEnabled = true,
     bool doubleTapToZoomEnabled = true,
@@ -170,6 +173,7 @@ class CombinedChartController
         borderPaint,
         drawGridBackground,
         drawBorders,
+        capType,
         clipValuesToContent,
         minOffset,
         keepPositionOnRotation,

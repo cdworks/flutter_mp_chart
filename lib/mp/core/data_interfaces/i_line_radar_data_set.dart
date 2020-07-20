@@ -21,6 +21,8 @@ mixin ILineRadarDataSet<T extends Entry>
   /// @return
   int getFillAlpha();
 
+  bool isGradientFill();
+
   /// Returns the stroke-width of the drawn line
   ///
   /// @return

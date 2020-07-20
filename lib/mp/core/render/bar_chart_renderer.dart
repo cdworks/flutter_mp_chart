@@ -108,7 +108,7 @@ class BarChartRenderer extends BarLineScatterCandleBubbleRenderer {
 
   void drawDataSet(Canvas c, IBarDataSet dataSet, int index) {
     Transformer trans = _provider.getTransformer(dataSet.getAxisDependency());
-
+    var capType = _provider.getBarLineCapType();
     _barBorderPaint..color = dataSet.getBarBorderColor();
     _barBorderPaint
       ..strokeWidth = Utils.convertDpToPixel(dataSet.getBarBorderWidth());
@@ -190,41 +190,58 @@ class BarChartRenderer extends BarLineScatterCandleBubbleRenderer {
 
         renderPaint
           ..shader = (LinearGradient(
-                  colors: List()
-                    ..add(gradientColor.startColor)
-                    ..add(gradientColor.endColor),
-                  tileMode: TileMode.mirror))
+              colors: List()
+                ..add(gradientColor.startColor)..add(gradientColor.endColor),
+              tileMode: TileMode.mirror))
               .createShader(Rect.fromLTRB(
-                  buffer.buffer[j],
-                  buffer.buffer[j + 3],
-                  buffer.buffer[j],
-                  buffer.buffer[j + 1]));
+              buffer.buffer[j],
+              buffer.buffer[j + 3],
+              buffer.buffer[j],
+              buffer.buffer[j + 1]));
       }
 
       if (dataSet.getGradientColors() != null) {
         renderPaint
           ..shader = (LinearGradient(
-                  colors: List()
-                    ..add(dataSet.getGradientColor2(j ~/ 4).startColor)
-                    ..add(dataSet.getGradientColor2(j ~/ 4).endColor),
-                  tileMode: TileMode.mirror))
+              colors: List()
+                ..add(dataSet
+                    .getGradientColor2(j ~/ 4)
+                    .startColor)..add(dataSet
+                    .getGradientColor2(j ~/ 4)
+                    .endColor),
+              tileMode: TileMode.mirror))
               .createShader(Rect.fromLTRB(
-                  buffer.buffer[j],
-                  buffer.buffer[j + 3],
-                  buffer.buffer[j],
-                  buffer.buffer[j + 1]));
+              buffer.buffer[j],
+              buffer.buffer[j + 3],
+              buffer.buffer[j],
+              buffer.buffer[j + 1]));
       }
 
-      c.drawRect(
-          Rect.fromLTRB(buffer.buffer[j], buffer.buffer[j + 1],
-              buffer.buffer[j + 2], buffer.buffer[j + 3]),
-          renderPaint);
-
-      if (drawBorder) {
-        c.drawRect(
+      if (capType == LineCapType.Round) {
+        var rect = Rect.fromLTRB(buffer.buffer[j], buffer.buffer[j + 1],
+          buffer.buffer[j + 2], buffer.buffer[j + 3]);
+        c.drawRRect(RRect.fromRectAndRadius( rect, Radius.circular(rect.height*0.5)), renderPaint);
+      }
+      else
+        {
+            c.drawRect(
             Rect.fromLTRB(buffer.buffer[j], buffer.buffer[j + 1],
                 buffer.buffer[j + 2], buffer.buffer[j + 3]),
-            _barBorderPaint);
+            renderPaint);
+        }
+
+      if (drawBorder) {
+        if(capType == LineCapType.Round) {
+          var rect = Rect.fromLTRB(buffer.buffer[j], buffer.buffer[j + 1],
+            buffer.buffer[j + 2], buffer.buffer[j + 3]);
+          c.drawRRect(RRect.fromRectAndRadius( rect, Radius.circular(rect.height*0.5)), _barBorderPaint);
+        }
+        else {
+          c.drawRect(
+              Rect.fromLTRB(buffer.buffer[j], buffer.buffer[j + 1],
+                  buffer.buffer[j + 2], buffer.buffer[j + 3]),
+              _barBorderPaint);
+        }
       }
     }
   }

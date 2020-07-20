@@ -111,7 +111,6 @@ abstract class AxisRenderer extends Renderer {
           viewPortHandler.contentLeft(), viewPortHandler.contentTop());
       MPPointD p2 = _trans.getValuesByTouchPoint1(
           viewPortHandler.contentLeft(), viewPortHandler.contentBottom());
-
       if (!inverted) {
         min = p2.y;
         max = p1.y;
@@ -123,7 +122,6 @@ abstract class AxisRenderer extends Renderer {
       MPPointD.recycleInstance2(p1);
       MPPointD.recycleInstance2(p2);
     }
-
     computeAxisValues(min, max);
   }
 
@@ -135,6 +133,15 @@ abstract class AxisRenderer extends Renderer {
     double yMax = max;
 
     int labelCount = _axis.labelCount;
+
+    if(_axis.forceLabels && labelCount == 2 && min == max)
+      {
+        _axis.entries = [0.0];
+        _axis.centeredEntries = [0.0];
+        _axis.entryCount = 1;
+        return;
+      }
+
     double range = (yMax - yMin).abs();
 
     if (labelCount == 0 || range <= 0 || range.isInfinite) {
@@ -147,7 +154,6 @@ abstract class AxisRenderer extends Renderer {
     // Find out how much spacing (in y value space) between axis values
     double rawInterval = range / labelCount;
     double interval = Utils.roundToNextSignificant(rawInterval);
-
     // If granularity is enabled, then do not allow the interval to go below specified granularity.
     // This is used to avoid repeated values when rounding values for display.
     if (_axis.granularityEnabled)
@@ -162,7 +168,6 @@ abstract class AxisRenderer extends Renderer {
       // 90
       interval = (10 * intervalMagnitude).floorToDouble();
     }
-
     int num = _axis.isCenterAxisLabelsEnabled() ? 1 : 0;
 
     // force label count
@@ -177,9 +182,12 @@ abstract class AxisRenderer extends Renderer {
 
       double v = min;
 
+
+
       for (int i = 0; i < labelCount; i++) {
         _axis.entries[i] = v;
         v += interval;
+
       }
 
       num = labelCount;

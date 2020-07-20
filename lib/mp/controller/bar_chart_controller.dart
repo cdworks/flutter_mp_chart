@@ -5,6 +5,7 @@ import 'package:mp_chart/mp/controller/bar_line_scatter_candle_bubble_controller
 import 'package:mp_chart/mp/core/axis/y_axis.dart';
 import 'package:mp_chart/mp/core/common_interfaces.dart';
 import 'package:mp_chart/mp/core/data/bar_data.dart';
+import 'package:mp_chart/mp/core/data_provider/bar_data_provider.dart';
 import 'package:mp_chart/mp/core/description.dart';
 import 'package:mp_chart/mp/core/functions.dart';
 import 'package:mp_chart/mp/core/marker/bar_chart_marker.dart';
@@ -20,12 +21,14 @@ class BarChartController
   bool drawValueAboveBar;
   bool drawBarShadow;
   bool fitBars;
+  LineCapType capType;
 
   BarChartController({
     this.highlightFullBarEnabled = true,
     this.drawValueAboveBar = false,
     this.drawBarShadow = false,
     this.fitBars = true,
+    this.capType,
     int maxVisibleCount = 100,
     bool autoScaleMinMaxEnabled = true,
     bool doubleTapToZoomEnabled = true,
@@ -164,6 +167,7 @@ class BarChartController
         borderPaint,
         drawGridBackground,
         drawBorders,
+        capType,
         clipValuesToContent,
         minOffset,
         keepPositionOnRotation,

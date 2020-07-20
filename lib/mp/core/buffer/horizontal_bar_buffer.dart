@@ -37,7 +37,6 @@ class HorizontalBarBuffer extends BarBuffer {
           right *= phaseY;
         else
           left *= phaseY;
-
         addBar(left, top, right, bottom);
       } else {
         double posY = 0;
@@ -72,7 +71,6 @@ class HorizontalBarBuffer extends BarBuffer {
           // multiply the height of the rect with the phase
           right *= phaseY;
           left *= phaseY;
-
           addBar(left, top, right, bottom);
         }
       }

@@ -36,6 +36,8 @@ class BarChartPainter extends BarLineChartBasePainter<BarData>
 
   final bool _fitBars;
 
+  final LineCapType _capType;
+
   BarChartPainter(
       BarData data,
       Animator animator,
@@ -70,6 +72,7 @@ class BarChartPainter extends BarLineChartBasePainter<BarData>
       Paint borderPaint,
       bool drawGridBackground,
       bool drawBorders,
+      LineCapType capType,
       bool clipValuesToContent,
       double minOffset,
       bool keepPositionOnRotation,
@@ -91,6 +94,7 @@ class BarChartPainter extends BarLineChartBasePainter<BarData>
         _drawValueAboveBar = drawValueAboveBar,
         _drawBarShadow = drawBarShadow,
         _fitBars = fitBars,
+        _capType = capType ?? LineCapType.Butt,
         super(
             data,
             animator,
@@ -274,5 +278,11 @@ class BarChartPainter extends BarLineChartBasePainter<BarData>
   @override
   BarData getBarData() {
     return getData();
+  }
+
+  @override
+  LineCapType getBarLineCapType() {
+    // TODO: implement getBarLineCapType
+    return _capType;
   }
 }

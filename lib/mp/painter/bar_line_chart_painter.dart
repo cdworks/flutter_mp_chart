@@ -467,7 +467,14 @@ abstract class BarLineChartBasePainter<
     }
 
     if (xAxis.enabled) {
-      _xAxisRenderer.computeAxis(xAxis.axisMinimum, xAxis.axisMaximum, false);
+      if(xAxis.forceLabels)
+        {
+
+          _xAxisRenderer.computeAxis(xAxis.axisMinimum + xAxis.spaceMin, xAxis.axisMaximum - xAxis.spaceMax, false);
+        }
+      else {
+        _xAxisRenderer.computeAxis(xAxis.axisMinimum, xAxis.axisMaximum, false);
+      }
     }
   }
 

@@ -122,7 +122,6 @@ class XAxisRendererHorizontalBarChart extends XAxisRenderer {
     bool centeringEnabled = xAxis.isCenterAxisLabelsEnabled();
 
     List<double> positions = List(xAxis.entryCount * 2);
-
     for (int i = 0; i < positions.length; i += 2) {
       // only fill x values
       if (centeringEnabled) {
@@ -133,7 +132,6 @@ class XAxisRendererHorizontalBarChart extends XAxisRenderer {
     }
 
     trans.pointValuesToPixel(positions);
-
     for (int i = 0; i < positions.length; i += 2) {
       double y = positions[i + 1];
 

@@ -33,6 +33,9 @@ class PieChartRenderer extends DataRenderer {
   /// chart
   TextPainter _centerTextPaint;
 
+  final TypeFace centerTextTypeface;
+  final double centerTextsize;
+
   /// paint object used for drwing the slice-text
   TextPainter _entryLabelsPaint;
 
@@ -53,7 +56,7 @@ class PieChartRenderer extends DataRenderer {
 
   PieChartRenderer(
       PieChartPainter chart, Animator animator, ViewPortHandler viewPortHandler,
-      {TypeFace centerTextTypeface, TypeFace entryLabelTypeface})
+      {this.centerTextTypeface,TypeFace entryLabelTypeface, this.centerTextsize})
       : super(animator, viewPortHandler) {
     _painter = chart;
 
@@ -68,10 +71,10 @@ class PieChartRenderer extends DataRenderer {
           ColorUtils.WHITE.green, ColorUtils.WHITE.blue)
       ..style = PaintingStyle.fill;
 
-    _centerTextPaint = PainterUtils.create(
-        null, null, ColorUtils.BLACK, Utils.convertDpToPixel(12),
-        fontFamily: centerTextTypeface?.fontFamily,
-        fontWeight: centerTextTypeface?.fontWeight);
+//    _centerTextPaint = PainterUtils.create(
+//        null, null, ColorUtils.BLACK, Utils.convertDpToPixel(_centerTextsize),
+//        fontFamily: centerTextTypeface?.fontFamily,
+//        fontWeight: centerTextTypeface?.fontWeight);
 
     valuePaint = PainterUtils.create(
         null, null, ColorUtils.WHITE, Utils.convertDpToPixel(9));
@@ -197,6 +200,7 @@ class PieChartRenderer extends DataRenderer {
   }
 
   void drawDataSet(Canvas c, IPieDataSet dataSet) {
+
     double angle = 0;
     double rotationAngle = _painter.getRotationAngle();
 
@@ -228,7 +232,7 @@ class PieChartRenderer extends DataRenderer {
       }
     }
 
-    renderPaint..color = ColorUtils.WHITE;
+    renderPaint..color = ColorUtils.LTGRAY;
     c.drawCircle(Offset(center.x, center.y), radius, renderPaint);
 
     final double sliceSpace =
@@ -501,10 +505,10 @@ class PieChartRenderer extends DataRenderer {
         // offset needed to center the drawn text in the slice
         final double angleOffset =
             (sliceAngle - sliceSpaceMiddleAngle / 2.0) / 2.0;
-
         angle = angle + angleOffset;
 
         final double transformedAngle = rotationAngle + angle * phaseY;
+
 
         double value = _painter.isUsePercentValuesEnabled()
             ? entry.y / yValueSum * 100
@@ -663,6 +667,12 @@ class PieChartRenderer extends DataRenderer {
 
   @override
   void drawValue(Canvas c, String valueText, double x, double y, Color color) {
+
+    if(x.isNaN || y.isNaN || x.isInfinite || y.isInfinite)
+      {
+        return;
+      }
+
     valuePaint = PainterUtils.create(
         valuePaint,
         valueText,
@@ -701,6 +711,7 @@ class PieChartRenderer extends DataRenderer {
   /// draws the hole in the center of the chart and the transparent circle /
   /// hole
   void drawHole(Canvas c) {
+
 //    if (_painter.isDrawHoleEnabled() && mBitmapCanvas != null) {
     if (_painter.isDrawHoleEnabled()) {
       double radius = _painter.getRadius();
@@ -713,10 +724,14 @@ class PieChartRenderer extends DataRenderer {
 //            center.x, center.y,
 //            holeRadius, _holePaint);
 //      }
-
       // only draw the circle if it can be seen (not covered by the hole)
+
+      renderPaint..color = ColorUtils.WHITE;
+      c.drawCircle(Offset(center.x, center.y), holeRadius, renderPaint);
+
       if (_transparentCirclePaint.color.alpha > 0 &&
           _painter.getTransparentCircleRadius() > _painter.getHoleRadius()) {
+
         int alpha = _transparentCirclePaint.color.alpha;
         double secondHoleRadius =
             radius * (_painter.getTransparentCircleRadius() / 100);
@@ -803,9 +818,12 @@ class PieChartRenderer extends DataRenderer {
 //      }
 
       c.save();
-
-      _centerTextPaint = PainterUtils.create(_centerTextPaint, centerText,
-          ColorUtils.BLACK, Utils.convertDpToPixel(12));
+      _centerTextPaint = PainterUtils.create(
+          null, centerText, ColorUtils.BLACK, Utils.convertDpToPixel(centerTextsize??12),
+          fontFamily: centerTextTypeface?.fontFamily,
+          fontWeight: centerTextTypeface?.fontWeight);
+//      _centerTextPaint = PainterUtils.create(_centerTextPaint, centerText,
+//          ColorUtils.BLACK, Utils.convertDpToPixel(12),fontWeight: );
       _centerTextPaint.layout();
       _centerTextPaint.paint(
           c,
@@ -1031,48 +1049,48 @@ class PieChartRenderer extends DataRenderer {
   /// This gives all pie-slices a rounded edge.
   ///
   /// @param c
-  void drawRoundedSlices(Canvas c) {
-    if (!_painter.isDrawRoundedSlicesEnabled()) return;
-
-    IPieDataSet dataSet = (_painter.getData() as PieData).getDataSet();
-
-    if (!dataSet.isVisible()) return;
-
-    double phaseX = animator.getPhaseX();
-    double phaseY = animator.getPhaseY();
-
-    MPPointF center = _painter.getCenterCircleBox();
-    double r = _painter.getRadius();
-
-    // calculate the radius of the "slice-circle"
-    double circleRadius = (r - (r * _painter.getHoleRadius() / 100)) / 2;
-
-    List<double> drawAngles = _painter.getDrawAngles();
-    double angle = _painter.getRotationAngle();
-
-    for (int j = 0; j < dataSet.getEntryCount(); j++) {
-      double sliceAngle = drawAngles[j];
-
-      Entry e = dataSet.getEntryForIndex(j);
-
-      // draw only if the value is greater than zero
-      if ((e.y.abs() > Utils.FLOAT_EPSILON)) {
-        double x = ((r - circleRadius) *
-                cos((angle + sliceAngle) * phaseY / 180 * pi) +
-            center.x);
-        double y = ((r - circleRadius) *
-                sin((angle + sliceAngle) * phaseY / 180 * pi) +
-            center.y);
-
-        renderPaint.color = dataSet.getColor2(j);
-//        mBitmapCanvas.drawCircle(x, y, circleRadius, renderPaint);
-        c.drawCircle(Offset(x, y), circleRadius, renderPaint);
-      }
-
-      angle += sliceAngle * phaseX;
-    }
-    MPPointF.recycleInstance(center);
-  }
+//  void drawRoundedSlices(Canvas c) {
+//    if (!_painter.isDrawRoundedSlicesEnabled()) return;
+//
+//    IPieDataSet dataSet = (_painter.getData() as PieData).getDataSet();
+//
+//    if (!dataSet.isVisible()) return;
+//
+//    double phaseX = animator.getPhaseX();
+//    double phaseY = animator.getPhaseY();
+//
+//    MPPointF center = _painter.getCenterCircleBox();
+//    double r = _painter.getRadius();
+//
+//    // calculate the radius of the "slice-circle"
+//    double circleRadius = (r - (r * _painter.getHoleRadius() / 100)) / 2;
+//
+//    List<double> drawAngles = _painter.getDrawAngles();
+//    double angle = _painter.getRotationAngle();
+//
+//    for (int j = 0; j < dataSet.getEntryCount(); j++) {
+//      double sliceAngle = drawAngles[j];
+//
+//      Entry e = dataSet.getEntryForIndex(j);
+//
+//      // draw only if the value is greater than zero
+//      if ((e.y.abs() > Utils.FLOAT_EPSILON)) {
+//        double x = ((r - circleRadius) *
+//                cos((angle + sliceAngle) * phaseY / 180 * pi) +
+//            center.x);
+//        double y = ((r - circleRadius) *
+//                sin((angle + sliceAngle) * phaseY / 180 * pi) +
+//            center.y);
+//
+//        renderPaint.color = dataSet.getColor2(j);
+////        mBitmapCanvas.drawCircle(x, y, circleRadius, renderPaint);
+//        c.drawCircle(Offset(x, y), circleRadius, renderPaint);
+//      }
+//
+//      angle += sliceAngle * phaseX;
+//    }
+//    MPPointF.recycleInstance(center);
+//  }
 
 //  /**
 //   * Releases the drawing bitmap. This should be called when {@link LineChart#onDetachedFromWindow()}.

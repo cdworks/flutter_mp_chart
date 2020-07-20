@@ -72,6 +72,7 @@ class RadarChartRenderer extends LineRadarRenderer {
     double phaseX = animator.getPhaseX();
     double phaseY = animator.getPhaseY();
 
+
     double sliceangle = _painter.getSliceAngle();
 
     // calculate the factor that is needed for transforming the value to
@@ -120,7 +121,7 @@ class RadarChartRenderer extends LineRadarRenderer {
 //      } else {
 
       drawFilledPath2(
-          c, surface, dataSet.getFillColor().value, dataSet.getFillAlpha());
+          c, surface, dataSet.getFillColor().value, dataSet.getFillAlpha(),isGradient: dataSet.isGradientFill());
 //      }
     }
 

@@ -73,6 +73,7 @@ class Legend extends ComponentBase {
   double _textHeightMax = 0;
 
   double _textWidthMax = 0;
+  double _formYoffset = 0;
 
   /// flag that indicates if word wrapping is enabled
   bool _wordWrapEnabled = false;
@@ -86,6 +87,7 @@ class Legend extends ComponentBase {
     this.textSize = Utils.convertDpToPixel(10);
     this.xOffset = Utils.convertDpToPixel(5);
     this.yOffset = Utils.convertDpToPixel(3); // 2
+    this.formYoffset = 0;
   }
 
   /// Constructor. Provide entries for the legend.
@@ -95,6 +97,7 @@ class Legend extends ComponentBase {
     this.textSize = Utils.convertDpToPixel(10);
     this.xOffset = Utils.convertDpToPixel(5);
     this.yOffset = Utils.convertDpToPixel(3);
+    this.formYoffset = 0;
     if (entries == null) {
       throw new Exception("entries array is NULL");
     }
@@ -184,6 +187,10 @@ class Legend extends ComponentBase {
   double get textHeightMax => _textHeightMax;
 
   double get textWidthMax => _textWidthMax;
+
+  double get formYoffset => _formYoffset;
+
+   set formYoffset(double value) => _formYoffset = value;
 
   /// Sets a custom legend's entries array.
   /// * A null label will start a group.

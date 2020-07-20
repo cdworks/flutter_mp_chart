@@ -22,6 +22,8 @@ abstract class LineRadarDataSet<T extends Entry>
   /// the width of the drawn data lines
   double _lineWidth = 2.5;
 
+  bool _isGradient = false;
+
   /// if true, the data will also be drawn filled
   bool _drawFilled = false;
 
@@ -64,6 +66,17 @@ abstract class LineRadarDataSet<T extends Entry>
   /// @param alpha
   void setFillAlpha(int alpha) {
     _fillAlpha = alpha;
+  }
+
+  @override
+  bool isGradientFill() {
+    // TODO: implement isGradientFill
+    return _isGradient;
+  }
+
+  void setGradientFill(bool isGradient)
+  {
+    _isGradient = isGradient;
   }
 
   /// set the line width of the chart (min = 0.2f, max = 10f); default 1f NOTE:

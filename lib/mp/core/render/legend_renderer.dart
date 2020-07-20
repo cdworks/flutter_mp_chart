@@ -32,9 +32,8 @@ class LegendRenderer extends Renderer {
   LegendRenderer(ViewPortHandler viewPortHandler, Legend legend)
       : super(viewPortHandler) {
     this._legend = legend;
-
     _legendLabelPaint = PainterUtils.create(
-        _legendLabelPaint, null, ColorUtils.BLACK, Utils.convertDpToPixel(9));
+        _legendLabelPaint, null, ColorUtils.BLACK, Utils.convertDpToPixel(legend.textSize));
 
     _legendFormPaint = Paint()
       ..isAntiAlias = true
@@ -320,7 +319,7 @@ class LegendRenderer extends Renderer {
             if (drawingForm) {
               if (direction == LegendDirection.RIGHT_TO_LEFT) posX -= formSize;
 
-              drawForm(c, posX, posY + formYOffset, e, _legend);
+              drawForm(c, posX, posY + formYOffset - _legend.formYoffset, e, _legend);
 
               if (direction == LegendDirection.LEFT_TO_RIGHT) posX += formSize;
             }
@@ -395,7 +394,7 @@ class LegendRenderer extends Renderer {
               else
                 posX -= formSize - stack;
 
-              drawForm(c, posX, posY + formYOffset, e, _legend);
+              drawForm(c, posX, posY + formYOffset - _legend.formYoffset, e, _legend);
 
               if (direction == LegendDirection.LEFT_TO_RIGHT) posX += formSize;
             }
@@ -510,8 +509,9 @@ class LegendRenderer extends Renderer {
   }
 
   void drawLabel(Canvas c, double x, double y, String label) {
+//    _legendLabelPaint.text.style.copyWith(fontSize: Utils.convertDpToPixel(legend.textSize))
     _legendLabelPaint.text =
-        TextSpan(text: label, style: _legendLabelPaint.text.style);
+        TextSpan(text: label, style:_legendLabelPaint.text.style);
     _legendLabelPaint.layout();
     _legendLabelPaint.paint(c, Offset(x, y - _legendLabelPaint.height));
   }

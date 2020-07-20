@@ -75,6 +75,8 @@ class PieChartPainter extends PieRadarChartPainter<PieData> {
 
   TypeFace _centerTextTypeface;
   TypeFace _entryLabelTypeface;
+  
+  double _centerTextSize;
 
   PieChartPainter(
       PieData data,
@@ -110,6 +112,7 @@ class PieChartPainter extends PieRadarChartPainter<PieData> {
       double centerTextOffsetY,
       TypeFace entryLabelTypeface,
       TypeFace centerTextTypeface,
+      double centerTextSize,
       double holeRadiusPercent,
       double transparentCircleRadiusPercent,
       bool drawCenterText,
@@ -132,6 +135,7 @@ class PieChartPainter extends PieRadarChartPainter<PieData> {
             MPPointF.getInstance1(centerTextOffsetX, centerTextOffsetY),
         _minAngleForSlices = minAngleForSlices,
         _centerTextTypeface = centerTextTypeface,
+          _centerTextSize = centerTextSize,
         _entryLabelTypeface = entryLabelTypeface,
         super(
             data,
@@ -164,7 +168,9 @@ class PieChartPainter extends PieRadarChartPainter<PieData> {
     super.initDefaultWithData();
     renderer = PieChartRenderer(this, animator, viewPortHandler,
         centerTextTypeface: _centerTextTypeface,
-        entryLabelTypeface: _entryLabelTypeface);
+        entryLabelTypeface: _entryLabelTypeface,
+      centerTextsize: _centerTextSize,
+    );
     highlighter = PieHighlighter(this);
   }
 
@@ -300,7 +306,6 @@ class PieChartPainter extends PieRadarChartPainter<PieData> {
             diff += temp;
           }
         }
-
         _drawAngles[cnt] = drawAngle;
 
         if (cnt == 0) {

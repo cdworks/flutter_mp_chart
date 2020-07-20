@@ -158,7 +158,6 @@ class Transformer {
       _valuePointsForGenerateTransformedValuesLine = List(count);
     }
     List<double> valuePoints = _valuePointsForGenerateTransformedValuesLine;
-
     for (int j = 0; j < count; j += 2) {
       Entry e = data.getEntryForIndex(j ~/ 2 + min);
 
@@ -170,6 +169,7 @@ class Transformer {
         valuePoints[j + 1] = 0;
       }
     }
+
 
     Matrix4Utils.mapPoints(getValueToPixelMatrix(), valuePoints);
 

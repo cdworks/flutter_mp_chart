@@ -28,6 +28,7 @@ import 'package:mp_chart/mp/core/transformer/transformer.dart';
 import 'package:mp_chart/mp/core/utils/utils.dart';
 import 'package:mp_chart/mp/core/view_port.dart';
 import 'package:mp_chart/mp/painter/bar_chart_painter.dart';
+import '../core/data_provider/bar_data_provider.dart';
 
 class HorizontalBarChartPainter extends BarChartPainter {
   HorizontalBarChartPainter(
@@ -64,6 +65,7 @@ class HorizontalBarChartPainter extends BarChartPainter {
       Paint borderPaint,
       bool drawGridBackground,
       bool drawBorders,
+      LineCapType capType,
       bool clipValuesToContent,
       double minOffset,
       bool keepPositionOnRotation,
@@ -115,6 +117,7 @@ class HorizontalBarChartPainter extends BarChartPainter {
             borderPaint,
             drawGridBackground,
             drawBorders,
+            capType,
             clipValuesToContent,
             minOffset,
             keepPositionOnRotation,

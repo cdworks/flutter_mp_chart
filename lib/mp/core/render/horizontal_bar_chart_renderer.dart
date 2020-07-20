@@ -43,7 +43,7 @@ class HorizontalBarChartRenderer extends BarChartRenderer {
   @override
   void drawDataSet(Canvas c, IBarDataSet dataSet, int index) {
     Transformer trans = provider.getTransformer(dataSet.getAxisDependency());
-
+    var capType = provider.getBarLineCapType();
     barBorderPaint
       ..color = dataSet.getBarBorderColor()
       ..strokeWidth = Utils.convertDpToPixel(dataSet.getBarBorderWidth());
@@ -100,9 +100,7 @@ class HorizontalBarChartRenderer extends BarChartRenderer {
     buffer.barWidth = (provider.getBarData().barWidth);
 
     buffer.feed(dataSet);
-
     trans.pointValuesToPixel(buffer.buffer);
-
     final bool isSingleColor = dataSet.getColors().length == 1;
 
     if (isSingleColor) {
@@ -120,16 +118,31 @@ class HorizontalBarChartRenderer extends BarChartRenderer {
         renderPaint..color = (dataSet.getColor2(j ~/ 4));
       }
 
-      c.drawRect(
-          Rect.fromLTRB(buffer.buffer[j], buffer.buffer[j + 1],
-              buffer.buffer[j + 2], buffer.buffer[j + 3]),
-          renderPaint);
+      if (capType == LineCapType.Round) {
 
-      if (drawBorder) {
+        var rect = Rect.fromLTRB(buffer.buffer[j], buffer.buffer[j + 1],
+            buffer.buffer[j + 2], buffer.buffer[j + 3]);
+        c.drawRRect(RRect.fromRectAndRadius( rect, Radius.circular(rect.height*0.5)), renderPaint);
+      }
+      else {
         c.drawRect(
             Rect.fromLTRB(buffer.buffer[j], buffer.buffer[j + 1],
                 buffer.buffer[j + 2], buffer.buffer[j + 3]),
-            barBorderPaint);
+            renderPaint);
+      }
+
+      if (drawBorder) {
+        if (capType == LineCapType.Round) {
+          var rect = Rect.fromLTRB(buffer.buffer[j], buffer.buffer[j + 1],
+              buffer.buffer[j + 2], buffer.buffer[j + 3]);
+          c.drawRRect(RRect.fromRectAndRadius( rect, Radius.circular(rect.height*0.5)), barBorderPaint);
+        }
+        else {
+          c.drawRect(
+              Rect.fromLTRB(buffer.buffer[j], buffer.buffer[j + 1],
+                  buffer.buffer[j + 2], buffer.buffer[j + 3]),
+              barBorderPaint);
+        }
       }
     }
   }
@@ -138,7 +151,6 @@ class HorizontalBarChartRenderer extends BarChartRenderer {
   void drawValues(Canvas c) {
     // if values are drawn
     if (!isDrawingValuesAllowed(provider)) return;
-
     List<IBarDataSet> dataSets = provider.getBarData().dataSets;
 
     final double valueOffsetPlus = Utils.convertDpToPixel(5);
@@ -147,6 +159,7 @@ class HorizontalBarChartRenderer extends BarChartRenderer {
     final bool drawValueAboveBar = provider.isDrawValueAboveBarEnabled();
 
     for (int i = 0; i < provider.getBarData().getDataSetCount(); i++) {
+
       IBarDataSet dataSet = dataSets[i];
 
       if (!shouldDrawValues(dataSet)) continue;
@@ -166,7 +179,6 @@ class HorizontalBarChartRenderer extends BarChartRenderer {
       MPPointF iconsOffset = MPPointF.getInstance3(dataSet.getIconsOffset());
       iconsOffset.x = Utils.convertDpToPixel(iconsOffset.x);
       iconsOffset.y = Utils.convertDpToPixel(iconsOffset.y);
-
       // if only single values are drawn (sum)
       if (!dataSet.isStacked()) {
         for (int j = 0;
@@ -198,7 +210,6 @@ class HorizontalBarChartRenderer extends BarChartRenderer {
             posOffset = -posOffset - valueTextWidth;
             negOffset = -negOffset - valueTextWidth;
           }
-
           if (dataSet.isDrawValuesEnabled()) {
             drawValue(
                 c,
@@ -263,7 +274,6 @@ class HorizontalBarChartRenderer extends BarChartRenderer {
               posOffset = -posOffset - valueTextWidth;
               negOffset = -negOffset - valueTextWidth;
             }
-
             if (dataSet.isDrawValuesEnabled()) {
               drawValue(
                   c,
@@ -336,7 +346,6 @@ class HorizontalBarChartRenderer extends BarChartRenderer {
               double y = (buffer.buffer[bufferIndex + 1] +
                       buffer.buffer[bufferIndex + 3]) /
                   2;
-
               if (!viewPortHandler.isInBoundsTop(y)) break;
 
               if (!viewPortHandler.isInBoundsX(x)) continue;

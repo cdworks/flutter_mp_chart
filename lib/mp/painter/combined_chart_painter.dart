@@ -11,6 +11,7 @@ import 'package:mp_chart/mp/core/data/combined_data.dart';
 import 'package:mp_chart/mp/core/data/line_data.dart';
 import 'package:mp_chart/mp/core/data/scatter_data.dart';
 import 'package:mp_chart/mp/core/data_interfaces/i_data_set.dart';
+import 'package:mp_chart/mp/core/data_provider/bar_data_provider.dart';
 import 'package:mp_chart/mp/core/data_provider/combined_data_provider.dart';
 import 'package:mp_chart/mp/core/description.dart';
 import 'package:mp_chart/mp/core/entry/entry.dart';
@@ -41,6 +42,8 @@ class CombinedChartPainter extends BarLineChartBasePainter<CombinedData>
   /// if set to true, a grey area is drawn behind each bar that indicates the
   /// maximum value
   bool _drawBarShadow = false;
+
+  final LineCapType _capType;
 
   List<DrawOrder> _drawOrder;
 
@@ -78,6 +81,7 @@ class CombinedChartPainter extends BarLineChartBasePainter<CombinedData>
       Paint borderPaint,
       bool drawGridBackground,
       bool drawBorders,
+      LineCapType capType,
       bool clipValuesToContent,
       double minOffset,
       bool keepPositionOnRotation,
@@ -100,6 +104,7 @@ class CombinedChartPainter extends BarLineChartBasePainter<CombinedData>
         _highlightFullBarEnabled = highlightFullBarEnabled,
         _drawValueAboveBar = drawValueAboveBar,
         _drawOrder = drawOrder,
+        _capType = capType ?? LineCapType.Butt,
         super(
             data,
             animator,
@@ -317,5 +322,11 @@ class CombinedChartPainter extends BarLineChartBasePainter<CombinedData>
       // draw the marker
       marker.draw(canvas, pos[0], pos[1]);
     }
+  }
+
+  @override
+  LineCapType getBarLineCapType() {
+    // TODO: implement getBarLineCapType
+    return _capType;
   }
 }

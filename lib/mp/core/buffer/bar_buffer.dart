@@ -107,7 +107,6 @@ class BarBuffer extends AbstractBuffer<IBarDataSet> {
           // multiply the height of the rect with the phase
           top *= phaseY;
           bottom *= phaseY;
-
           addBar(left, top, right, bottom);
         }
       }
